@@ -1,0 +1,8 @@
+
+
+https://www.cargo-lambda.info/guide/getting-started.html
+cargo lambda new --http rustrocket
+
+cargo lambda watch
+
+http://localhost:9000/?name=luchino
