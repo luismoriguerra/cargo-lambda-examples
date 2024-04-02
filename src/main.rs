@@ -1,30 +1,43 @@
-use lambda_http::{run, service_fn, tracing, Body, Error, Request, RequestExt, Response};
+use lambda_http::{run, service_fn, tracing, Body, Error, Request, Response};
 
 /// This is the main body for the function.
 /// Write your code inside it.
 /// There are some code example in the following URLs:
 /// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/examples
-async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
-    // Extract some useful information from the request
-    let who = event
-        .query_string_parameters_ref()
-        .and_then(|params| params.first("name"))
-        .unwrap_or("world");
-    let message = format!("Hello {who}, this is an AWS Lambda HTTP request");
+// async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
+//     // Extract some useful information from the request
+//     let who = event
+//         .query_string_parameters_ref()
+//         .and_then(|params| params.first("name"))
+//         .unwrap_or("world");
+//     let message = format!("Hello {who}, this is an AWS Lambda HTTP request");
 
-    // Return something that implements IntoResponse.
-    // It will be serialized to the right response event automatically by the runtime
+//     // Return something that implements IntoResponse.
+//     // It will be serialized to the right response event automatically by the runtime
+//     let resp = Response::builder()
+//         .status(200)
+//         .header("content-type", "text/html")
+//         .body(message.into())
+//         .map_err(Box::new)?;
+//     Ok(resp)
+// }
+
+async fn function_handler(_event: Request) -> Result<Response<Body>, Error> {
     let resp = Response::builder()
         .status(200)
         .header("content-type", "text/html")
-        .body(message.into())
+        .body("<h2>Hello, World!</h2>".into())
         .map_err(Box::new)?;
     Ok(resp)
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    tracing::init_default_subscriber();
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::INFO)
+        .with_target(false)
+        .without_time()
+        .init();
 
     run(service_fn(function_handler)).await
 }

@@ -6,3 +6,24 @@ cargo lambda new --http rustrocket
 cargo lambda watch
 
 http://localhost:9000/?name=luchino
+
+cargo lambda watch
+cargo lambda invoke hello --data-ascii '{"command": "hello from logrocket"}'
+
+cargo lambda build
+
+echo > rust-role.json
+
+cargo lambda build --release
+cargo lambda deploy --enable-function-url rustrocket
+cargo lambda deploy hello
+
+
+ https://5buxpa6qkjtkctheq3agmpzu5y0oeukv.lambda-url.us-west-2.on.aws/
+ 🔍 function arn: arn:aws:lambda:us-west-2:395594542180:function:hello
+
+
+cargo lambda invoke \
+--remote \
+--data-ascii '{"command": "hello from logrocket"}' \
+arn:aws:lambda:us-west-2:395594542180:function:hello
